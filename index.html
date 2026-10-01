@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:,">
+<title>速算反应训练</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+
+  <!-- ========== 首页 ========== -->
+  <section class="screen active" id="screen-home">
+    <header class="home-header">
+      <h1>速算反应训练</h1>
+      <p class="tagline">心算速度 · 数字大脑反应力</p>
+    </header>
+
+    <div class="card setup-card">
+      <div class="field">
+        <div class="field-label">训练模式</div>
+        <div class="chip-row" id="mode-chips">
+          <button type="button" class="chip selected" data-mode="timed">限时挑战</button>
+          <button type="button" class="chip" data-mode="fixed">固定题数</button>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-label" id="param-label">时长</div>
+        <div class="chip-row" id="param-chips"></div>
+      </div>
+      <div class="best-line" id="best-line"></div>
+      <button type="button" class="btn btn-primary btn-lg" id="btn-start">开始训练</button>
+      <button type="button" class="btn btn-ghost btn-block" id="btn-history">历史成绩</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">题目规则</div>
+      <ul class="rule-list">
+        <li><span class="rule-type">加减法</span><span>两个 3~4 位数（100–9999）相加减，结果非负</span></li>
+        <li><span class="rule-type">乘法</span><span>两位数 × 两位数（10–99）</span></li>
+        <li><span class="rule-type">除法</span><span>被除数 ≤4 位、除数 ≤2 位，保证整除，占比低于 10%</span></li>
+      </ul>
+      <p class="rule-hint">计分：答对得 100 分基础分，5 秒内答完按速度加分，连击 3 题起每题额外加分。答错显示正确答案后自动进入下一题。</p>
+    </div>
+  </section>
+
+  <!-- ========== 答题 ========== -->
+  <section class="screen" id="screen-quiz">
+    <div class="quiz-top">
+      <button type="button" class="btn-quit" id="btn-quit">✕ 退出</button>
+      <div class="quiz-metric">
+        <span class="metric-value" id="metric-value">60.0</span>
+        <span class="metric-label" id="metric-label">剩余秒数</span>
+      </div>
+      <div class="quiz-metric">
+        <span class="metric-value" id="score-value">0</span>
+        <span class="metric-label">得分</span>
+      </div>
+    </div>
+    <div class="progress-track" id="progress-track" hidden><div class="progress-fill" id="progress-fill"></div></div>
+
+    <div class="question-card" id="question-card">
+      <div class="streak-badge" id="streak-badge" hidden>连击 ×3</div>
+      <div class="question-text" id="question-text"></div>
+      <div class="points-float" id="points-float"></div>
+    </div>
+
+    <form class="answer-form" id="answer-form">
+      <input id="answer-input" type="text" inputmode="numeric" autocomplete="off"
+             placeholder="?" maxlength="5" aria-label="输入答案">
+      <button type="submit" class="btn btn-primary" id="btn-submit">提交</button>
+    </form>
+
+    <div class="feedback" id="feedback" aria-live="polite">
+      <span id="feedback-text"></span>
+    </div>
+  </section>
+
+  <!-- ========== 结果 ========== -->
+  <section class="screen" id="screen-result">
+    <header class="result-header">
+      <h2>训练完成</h2>
+      <p class="result-sub" id="result-sub"></p>
+    </header>
+
+    <div class="card hero-tile">
+      <div class="stat-label">本次得分</div>
+      <div class="hero-value" id="r-score">0</div>
+    </div>
+
+    <div class="kpi-row" id="r-kpis"></div>
+
+    <div class="card">
+      <div class="card-title">分题型表现</div>
+      <table class="data-table" id="r-type-table"></table>
+    </div>
+
+    <div class="card" id="r-wrong-card" hidden>
+      <div class="card-title">错题回顾</div>
+      <ul class="wrong-list" id="r-wrong-list"></ul>
+    </div>
+
+    <div class="btn-row">
+      <button type="button" class="btn btn-primary btn-lg" id="btn-again">再来一轮</button>
+      <button type="button" class="btn btn-ghost btn-lg" id="btn-home">返回首页</button>
+    </div>
+  </section>
+
+  <!-- ========== 历史记录 ========== -->
+  <section class="screen" id="screen-history">
+    <header class="result-header">
+      <h2>历史成绩</h2>
+    </header>
+
+    <div class="card empty-card" id="h-empty" hidden>暂无训练记录，先完成一轮训练吧</div>
+
+    <div id="h-body" hidden>
+      <div class="kpi-row" id="h-kpis"></div>
+
+      <div class="card">
+        <div class="card-title">薄弱环节分析</div>
+        <table class="data-table" id="h-type-table"></table>
+      </div>
+
+      <div class="card">
+        <div class="card-title">训练记录</div>
+        <div class="table-scroll">
+          <table class="data-table" id="h-session-table"></table>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button type="button" class="btn btn-ghost btn-lg" id="btn-clear">清空历史</button>
+      <button type="button" class="btn btn-primary btn-lg" id="btn-home2">返回首页</button>
+    </div>
+  </section>
+
+</div>
+<script src="app.js"></script>
+</body>
+</html>
